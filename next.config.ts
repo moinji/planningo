@@ -1,0 +1,36 @@
+import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
+const withPWA = withPWAInit({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+});
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "*.kakaocdn.net",
+      },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      },
+    ],
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
+};
+
+export default withPWA(withNextIntl(nextConfig));
