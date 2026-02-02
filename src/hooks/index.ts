@@ -5,3 +5,4 @@ export { useExpenses, useCreateExpense, useUpdateExpense, useDeleteExpense, useM
 export { useChecklists, useCreateChecklist, useUpdateChecklist, useDeleteChecklist, useCreateChecklistItem, useUpdateChecklistItem, useToggleChecklistItem, useDeleteChecklistItem, SUGGESTED_CHECKLIST_ITEMS } from "./use-checklists";
 export { usePlaces, usePlacesByCategory, useCreatePlace, useUpdatePlace, useDeletePlace, PLACE_CATEGORY_LABELS } from "./use-places";
 export { useRealtime, usePresence } from "./use-realtime";
+export { useNotifications, useUnreadCount, useMarkAsRead, useMarkAllAsRead, useDeleteNotification, NOTIFICATION_CONFIG } from "./use-notifications";
