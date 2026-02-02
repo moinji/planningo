@@ -4,12 +4,52 @@
 
 ## 주요 기능
 
-- **공동 여행 계획**: 친구들과 실시간으로 여행 일정을 함께 수정
-- **일정 관리**: 날짜별 일정을 드래그 앤 드롭으로 쉽게 관리
-- **지출 정산**: 누가 얼마를 냈는지 자동 계산 및 정산
-- **체크리스트**: 준비물 체크리스트 공유 및 관리
-- **장소 저장**: 가고 싶은 장소를 지도에서 저장
-- **초대 코드**: 간편한 초대 코드로 친구 초대
+### 인증
+- 이메일 로그인/회원가입
+- 소셜 로그인 (카카오, Google)
+- 사용자 프로필 관리
+
+### 여행 관리
+- **여행 생성**: 제목, 여행지, 날짜, 예산 설정
+- **초대 코드**: 6자리 코드로 친구 초대
+- **공유 링크**: Web Share API로 간편 공유
+- **멤버 관리**: 방장, 관리자, 멤버 역할
+
+### 일정 탭
+- 날짜별 일정 목록 (Day 1, Day 2...)
+- 드래그 앤 드롭으로 순서 변경
+- 시작/종료 시간, 메모 추가
+- 장소 연결 기능
+
+### 지출 탭
+- 카테고리별 지출 관리 (식비, 교통, 숙박 등)
+- 멤버별 지출 내역
+- 자동 정산 계산 (누가 누구에게 얼마를 보내야 하는지)
+- 지출 참여자 선택
+
+### 체크리스트 탭
+- 공유/개인 체크리스트 구분
+- 추천 체크리스트 템플릿
+- 항목 완료 체크 및 삭제
+
+### 장소 탭
+- 카테고리별 장소 저장 (음식점, 카페, 관광지 등)
+- 주소, 전화번호, 웹사이트 저장
+- 카카오맵/구글맵 연동
+
+### 실시간 동기화
+- Supabase Realtime으로 실시간 업데이트
+- 다른 멤버의 변경사항 즉시 반영
+
+### 알림 시스템
+- 여행 초대, 일정 변경, 지출 추가 등 알림
+- 읽음/안읽음 관리
+- 알림 삭제
+
+### 프로필
+- 여행 통계 (전체, 진행중, 완료)
+- "프링" 캐릭터 인사말
+- 로그아웃
 
 ## 기술 스택
 
@@ -18,8 +58,10 @@
 - **Styling**: Tailwind CSS v4
 - **Database & Auth**: Supabase
 - **State Management**: Zustand, TanStack Query
+- **Drag & Drop**: @dnd-kit
 - **i18n**: next-intl (한국어, English)
 - **PWA**: @ducanh2912/next-pwa
+- **Form**: react-hook-form + Zod
 
 ## 시작하기
 
@@ -47,8 +89,8 @@ cp .env.example .env.local
 필요한 환경 변수:
 - `NEXT_PUBLIC_SUPABASE_URL`: Supabase 프로젝트 URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase 익명 키
-- `NEXT_PUBLIC_KAKAO_MAP_API_KEY`: 카카오맵 API 키 (국내 지도)
-- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`: Google Maps API 키 (해외 지도)
+- `NEXT_PUBLIC_KAKAO_MAP_API_KEY`: 카카오맵 API 키 (선택)
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`: Google Maps API 키 (선택)
 
 ### 4. Supabase 설정
 
@@ -71,7 +113,6 @@ npm run dev      # 개발 서버 실행
 npm run build    # 프로덕션 빌드
 npm run start    # 프로덕션 서버 실행
 npm run lint     # ESLint 실행
-npm run test     # Playwright 테스트 실행
 ```
 
 ## 프로젝트 구조
@@ -83,10 +124,19 @@ src/
 │   ├── (auth)/         # 인증 페이지 (로그인, 회원가입)
 │   └── auth/           # OAuth 콜백
 ├── components/         # React 컴포넌트
-│   ├── ui/            # 기본 UI 컴포넌트
-│   ├── layout/        # 레이아웃 컴포넌트
-│   └── common/        # 공통 컴포넌트
+│   ├── ui/            # 기본 UI 컴포넌트 (Button, Card, Modal 등)
+│   ├── layout/        # 레이아웃 컴포넌트 (Header, BottomNav)
+│   ├── common/        # 공통 컴포넌트 (EmptyState, LoadingScreen)
+│   └── trip/          # 여행 관련 컴포넌트 (탭, 모달)
 ├── hooks/              # Custom React Hooks
+│   ├── use-auth.ts    # 인증 관련
+│   ├── use-trips.ts   # 여행 CRUD
+│   ├── use-schedules.ts # 일정 CRUD
+│   ├── use-expenses.ts  # 지출 CRUD + 정산 계산
+│   ├── use-checklists.ts # 체크리스트 CRUD
+│   ├── use-places.ts  # 장소 CRUD
+│   ├── use-notifications.ts # 알림
+│   └── use-realtime.ts # 실시간 동기화
 ├── lib/                # 유틸리티 및 라이브러리 설정
 │   ├── supabase/      # Supabase 클라이언트
 │   └── validations/   # Zod 스키마
