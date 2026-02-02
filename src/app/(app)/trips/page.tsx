@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Plus, Search, Plane } from "lucide-react";
 import { Header, HeaderAction } from "@/components/layout";
@@ -62,11 +63,12 @@ export default function TripsPage() {
               <Link key={trip.id} href={`/trips/${trip.id}`}>
                 <Card hoverable className="overflow-hidden">
                   {trip.coverImage && (
-                    <div className="h-32 bg-surface -mx-4 -mt-4 mb-4">
-                      <img
+                    <div className="h-32 bg-surface -mx-4 -mt-4 mb-4 relative">
+                      <Image
                         src={trip.coverImage}
                         alt={trip.title}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
                     </div>
                   )}

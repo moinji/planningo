@@ -1,14 +1,16 @@
-import { forwardRef, type ImgHTMLAttributes } from "react";
+import { forwardRef, type ImgHTMLAttributes, type CSSProperties } from "react";
+import Image from "next/image";
 import { cn, getInitials } from "@/lib/utils";
 
-export interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
+export interface AvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   name?: string;
   showBorder?: boolean;
   borderColor?: string;
+  src?: string | null;
 }
 
-const Avatar = forwardRef<HTMLImageElement, AvatarProps>(
+const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   (
     {
       className,
@@ -30,18 +32,31 @@ const Avatar = forwardRef<HTMLImageElement, AvatarProps>(
       xl: "h-16 w-16 text-xl",
     };
 
+    const pixelSizes = {
+      xs: 24,
+      sm: 32,
+      md: 40,
+      lg: 48,
+      xl: 64,
+    };
+
     const initials = name ? getInitials(name) : "?";
+
+    const borderStyle: CSSProperties | undefined = borderColor
+      ? { ["--tw-ring-color" as string]: borderColor }
+      : undefined;
 
     if (!src) {
       return (
         <div
+          ref={ref}
           className={cn(
             "inline-flex items-center justify-center rounded-full bg-primary-light text-primary font-medium",
             sizes[size],
-            showBorder && "ring-2 ring-offset-2",
+            showBorder && "ring-2 ring-offset-2 ring-primary",
             className
           )}
-          style={borderColor ? { ringColor: borderColor } : undefined}
+          style={borderStyle}
         >
           {initials}
         </div>
@@ -49,19 +64,25 @@ const Avatar = forwardRef<HTMLImageElement, AvatarProps>(
     }
 
     return (
-      <img
+      <div
         ref={ref}
-        src={src}
-        alt={alt || name || "Avatar"}
         className={cn(
-          "inline-block rounded-full object-cover",
+          "inline-block rounded-full overflow-hidden",
           sizes[size],
-          showBorder && "ring-2 ring-offset-2",
+          showBorder && "ring-2 ring-offset-2 ring-primary",
           className
         )}
-        style={borderColor ? { ringColor: borderColor } : undefined}
-        {...props}
-      />
+        style={borderStyle}
+      >
+        <Image
+          src={src}
+          alt={alt || name || "Avatar"}
+          width={pixelSizes[size]}
+          height={pixelSizes[size]}
+          className="w-full h-full object-cover"
+          {...(props as Record<string, unknown>)}
+        />
+      </div>
     );
   }
 );
