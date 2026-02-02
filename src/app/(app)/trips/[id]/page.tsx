@@ -18,7 +18,7 @@ import { Header, HeaderAction } from "@/components/layout";
 import { Button, Card, Avatar, Badge } from "@/components/ui";
 import { LoadingScreen, EmptyState } from "@/components/common";
 import { ScheduleTab, ExpenseTab, ChecklistTab, PlaceTab } from "@/components/trip";
-import { useTrip } from "@/hooks";
+import { useTrip, useRealtime } from "@/hooks";
 import { formatDate } from "@/lib/utils";
 
 interface TripDetailPageProps {
@@ -39,6 +39,9 @@ export default function TripDetailPage({ params }: TripDetailPageProps) {
   const { data: trip, isLoading, error } = useTrip(id);
   const [activeTab, setActiveTab] = useState("schedule");
   const [copied, setCopied] = useState(false);
+
+  // Enable real-time synchronization
+  useRealtime({ tripId: id, enabled: !!trip });
 
   const handleCopyInviteCode = async () => {
     if (trip?.invite_code) {
