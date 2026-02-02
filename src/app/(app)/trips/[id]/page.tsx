@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import { Header, HeaderAction } from "@/components/layout";
 import { Button, Card, Avatar, Badge } from "@/components/ui";
 import { LoadingScreen, EmptyState } from "@/components/common";
-import { ScheduleTab, ExpenseTab, ChecklistTab } from "@/components/trip";
+import { ScheduleTab, ExpenseTab, ChecklistTab, PlaceTab } from "@/components/trip";
 import { useTrip } from "@/hooks";
 import { formatDate } from "@/lib/utils";
 
@@ -210,17 +210,7 @@ export default function TripDetailPage({ params }: TripDetailPageProps) {
 
           {activeTab === "checklist" && <ChecklistTab trip={trip} />}
 
-          {activeTab === "place" && (
-            <EmptyState
-              icon={<MapPin className="w-12 h-12" />}
-              title={t("place.noPlaces")}
-              description="가고 싶은 장소를 저장해보세요!"
-              action={{
-                label: t("place.addPlace"),
-                onClick: () => console.log("Add place"),
-              }}
-            />
-          )}
+          {activeTab === "place" && <PlaceTab trip={trip} />}
         </div>
       </main>
     </>
