@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PLANNINGO
 
-## Getting Started
+친구들과 함께 여행 계획을 세우고 공유하는 웹 애플리케이션입니다.
 
-First, run the development server:
+## 주요 기능
+
+- **공동 여행 계획**: 친구들과 실시간으로 여행 일정을 함께 수정
+- **일정 관리**: 날짜별 일정을 드래그 앤 드롭으로 쉽게 관리
+- **지출 정산**: 누가 얼마를 냈는지 자동 계산 및 정산
+- **체크리스트**: 준비물 체크리스트 공유 및 관리
+- **장소 저장**: 가고 싶은 장소를 지도에서 저장
+- **초대 코드**: 간편한 초대 코드로 친구 초대
+
+## 기술 스택
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Database & Auth**: Supabase
+- **State Management**: Zustand, TanStack Query
+- **i18n**: next-intl (한국어, English)
+- **PWA**: @ducanh2912/next-pwa
+
+## 시작하기
+
+### 1. 저장소 클론
+
+```bash
+git clone https://github.com/moinji/planningo.git
+cd planningo
+```
+
+### 2. 의존성 설치
+
+```bash
+npm install
+```
+
+### 3. 환경 변수 설정
+
+`.env.example`을 복사하여 `.env.local`을 생성하고 필요한 값을 입력합니다:
+
+```bash
+cp .env.example .env.local
+```
+
+필요한 환경 변수:
+- `NEXT_PUBLIC_SUPABASE_URL`: Supabase 프로젝트 URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase 익명 키
+- `NEXT_PUBLIC_KAKAO_MAP_API_KEY`: 카카오맵 API 키 (국내 지도)
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`: Google Maps API 키 (해외 지도)
+
+### 4. Supabase 설정
+
+1. [Supabase](https://supabase.com)에서 새 프로젝트를 생성합니다.
+2. SQL Editor에서 `supabase/migrations/001_initial_schema.sql` 파일의 내용을 실행합니다.
+3. Authentication 설정에서 Email과 OAuth 제공자(Kakao, Google)를 활성화합니다.
+
+### 5. 개발 서버 실행
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000)에서 앱을 확인할 수 있습니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 스크립트
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # 개발 서버 실행
+npm run build    # 프로덕션 빌드
+npm run start    # 프로덕션 서버 실행
+npm run lint     # ESLint 실행
+npm run test     # Playwright 테스트 실행
+```
 
-## Learn More
+## 프로젝트 구조
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                 # Next.js App Router 페이지
+│   ├── (app)/          # 인증 필요 페이지 (여행, 프로필 등)
+│   ├── (auth)/         # 인증 페이지 (로그인, 회원가입)
+│   └── auth/           # OAuth 콜백
+├── components/         # React 컴포넌트
+│   ├── ui/            # 기본 UI 컴포넌트
+│   ├── layout/        # 레이아웃 컴포넌트
+│   └── common/        # 공통 컴포넌트
+├── hooks/              # Custom React Hooks
+├── lib/                # 유틸리티 및 라이브러리 설정
+│   ├── supabase/      # Supabase 클라이언트
+│   └── validations/   # Zod 스키마
+├── stores/             # Zustand 상태 관리
+├── types/              # TypeScript 타입 정의
+└── i18n/               # 다국어 지원
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 라이센스
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+이 프로젝트는 개인 프로젝트입니다.
