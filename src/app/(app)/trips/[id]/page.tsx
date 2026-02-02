@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { Header, HeaderAction } from "@/components/layout";
 import { Button, Card, Avatar, Badge } from "@/components/ui";
 import { LoadingScreen, EmptyState } from "@/components/common";
+import { ScheduleTab, ExpenseTab, ChecklistTab } from "@/components/trip";
 import { useTrip } from "@/hooks";
 import { formatDate } from "@/lib/utils";
 
@@ -203,41 +204,11 @@ export default function TripDetailPage({ params }: TripDetailPageProps) {
 
         {/* Tab Content */}
         <div className="px-4 py-4">
-          {activeTab === "schedule" && (
-            <EmptyState
-              icon={<Calendar className="w-12 h-12" />}
-              title={t("schedule.noSchedule")}
-              description={t("schedule.addFirst")}
-              action={{
-                label: t("schedule.addSchedule"),
-                onClick: () => console.log("Add schedule"),
-              }}
-            />
-          )}
+          {activeTab === "schedule" && <ScheduleTab trip={trip} />}
 
-          {activeTab === "expense" && (
-            <EmptyState
-              icon={<Receipt className="w-12 h-12" />}
-              title={t("expense.noExpense")}
-              description="첫 지출을 등록해보세요!"
-              action={{
-                label: t("expense.addExpense"),
-                onClick: () => console.log("Add expense"),
-              }}
-            />
-          )}
+          {activeTab === "expense" && <ExpenseTab trip={trip} />}
 
-          {activeTab === "checklist" && (
-            <EmptyState
-              icon={<CheckSquare className="w-12 h-12" />}
-              title={t("checklist.noChecklist")}
-              description="준비물 체크리스트를 만들어보세요!"
-              action={{
-                label: t("checklist.addChecklist"),
-                onClick: () => console.log("Add checklist"),
-              }}
-            />
-          )}
+          {activeTab === "checklist" && <ChecklistTab trip={trip} />}
 
           {activeTab === "place" && (
             <EmptyState

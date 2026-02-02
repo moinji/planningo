@@ -11,3 +11,4 @@ export {
 } from "./card";
 export { Avatar, AvatarGroup, type AvatarProps, type AvatarGroupProps } from "./avatar";
 export { Badge, type BadgeProps } from "./badge";
+export { Modal, ModalFooter } from "./modal";
