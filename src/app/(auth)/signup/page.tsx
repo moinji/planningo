@@ -6,11 +6,14 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Mail, Lock, User, Plane } from "lucide-react";
 import { Button, Input } from "@/components/ui";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function SignupPage() {
   const t = useTranslations();
   const router = useRouter();
+  const { signUpWithEmail, signInWithOAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -64,16 +67,24 @@ export default function SignupPage() {
     if (!validate()) return;
 
     setIsLoading(true);
-    // TODO: Implement actual signup logic
-    setTimeout(() => {
-      setIsLoading(false);
+    setSubmitError(null);
+
+    try {
+      await signUpWithEmail(formData.email, formData.password, formData.nickname);
       router.push("/trips");
-    }, 1000);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSocialSignup = (provider: "kakao" | "google") => {
-    // TODO: Implement OAuth signup
-    console.log(`Signup with ${provider}`);
+  const handleSocialSignup = async (provider: "kakao" | "google") => {
+    try {
+      await signInWithOAuth(provider);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "소셜 로그인에 실패했습니다.");
+    }
   };
 
   return (
@@ -123,6 +134,13 @@ export default function SignupPage() {
               </span>
             </div>
           </div>
+
+          {/* Error Message */}
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              {submitError}
+            </div>
+          )}
 
           {/* Signup Form */}
           <form onSubmit={handleSubmit} className="space-y-4">

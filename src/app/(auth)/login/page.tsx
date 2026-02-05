@@ -2,31 +2,45 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Mail, Lock, Plane } from "lucide-react";
 import { Button, Input } from "@/components/ui";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function LoginPage() {
   const t = useTranslations();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { signInWithEmail, signInWithOAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const redirectTo = searchParams.get("redirect") || "/trips";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: Implement actual login logic
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      await signInWithEmail(email, password);
+      router.push(redirectTo);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "로그인에 실패했습니다.");
+    } finally {
       setIsLoading(false);
-      router.push("/trips");
-    }, 1000);
+    }
   };
 
-  const handleSocialLogin = (provider: "kakao" | "google") => {
-    // TODO: Implement OAuth login
-    console.log(`Login with ${provider}`);
+  const handleSocialLogin = async (provider: "kakao" | "google") => {
+    try {
+      await signInWithOAuth(provider);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "소셜 로그인에 실패했습니다.");
+    }
   };
 
   return (
@@ -77,6 +91,13 @@ export default function LoginPage() {
               </span>
             </div>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              {error}
+            </div>
+          )}
 
           {/* Email Login Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
